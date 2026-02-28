@@ -39,7 +39,6 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-          cache-dependency-path: crypto-seed-vault/package-lock.json
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
@@ -48,7 +47,7 @@ jobs:
 
       - name: Install Rust dependencies
         run: |
-          cd crypto-seed-vault/src-tauri
+          cd src-tauri
           cargo fetch
 
       - name: Build Tauri app
@@ -62,32 +61,3 @@ jobs:
           releaseDraft: true
           prerelease: false
           args: ${{ matrix.args }}
-
-  build-windows:
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-          cache-dependency-path: crypto-seed-vault/package-lock.json
-
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Install dependencies
-        run: |
-          cd crypto-seed-vault
-          npm install
-          cd src-tauri
-          cargo fetch
-
-      - name: Build
-        uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
